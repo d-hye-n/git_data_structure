@@ -6,11 +6,11 @@ def counthanoi(n: int, f: str, t: str, v: str) -> None:
 
     def hanoi(n, f, t, v):
         if n == 1:
-            #print(f'{f} -> {t}')
+            #print(f'n번 {f} -> {t}')
             pass
         else:
             hanoi(n - 1, f, t, v)
-            #print(f'{f} -> {t}')
+            #print(f'n번 {f} -> {t}')
             hanoi(n - 1, v, f, t)
         nonlocal k  #전역변수 설정
         k += 1
