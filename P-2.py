@@ -94,16 +94,21 @@ while True:
         outfile.close()
 
     elif command == 'm':
+        """
         filename = 'test.txt'
         infile = open(filename, "r")
         lines = infile.readlines()
         for line in lines:
             li.insert(li.size, line.rstrip('\n').strip(string.punctuation+" "))
         infile.close()
-        li2 = sum(list(map(lambda li:li.split(' '), filter(None, li.array))), [])
+        """
+        # l을 시행하고 나서 m을 할 것이라 생각하고 주석처리함.
+        li2 = sum(list(map(lambda li:li.strip(string.punctuation+" ").split(' '), filter(None, li.array))), [])
         filename = 'dic.txt'
         outfile = open(filename, "w")
         in_li = sorted(set(li2), key = li2.index)
         for i in in_li:
             outfile.write(f"{i}: {list(li2).count(i)}"+"\n")
         outfile.close()
+        for line in in_li:
+            print(f"{line}: {list(li2).count(line)}")
