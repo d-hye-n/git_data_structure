@@ -58,7 +58,7 @@ def DFS() :			# 깊이우선탐색 함수
         (x,y) = here
 
         if (map[y][x] == 'x') :	# 출구이면 성공. True 반환
-            return count
+            return count - 1
         else :
             map[y][x] = '.'	# 현재위치를 지나왔다고 ’.’표시
             if isValidPos(x, y - 1): stack.push((x, y - 1)) # 상
