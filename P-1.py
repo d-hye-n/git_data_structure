@@ -23,4 +23,4 @@ def counthanoi(n: int, f: str, t: str, v: str) -> None:
 p = int(input())
 start = time.time()
 counthanoi(p, 'A', 'B', 'C')
-print(time.time() - start)
+print(f'{time.time() - start}초')
