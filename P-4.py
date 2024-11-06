@@ -1,4 +1,4 @@
-lass CircularQueue :
+class CircularQueue :
     def __init__( self, capacity = 10 ) :
         self.capacity = capacity        # 용량(고정)
         self.array = [None] * capacity  # 요소들을 저장할 배열
