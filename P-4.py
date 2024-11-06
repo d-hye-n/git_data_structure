@@ -1,11 +1,4 @@
-# P-4 : 원형 큐(circular queue)를 구현하고 기능을 테스트 하기오.
-# - 교재 169 쪽 (코드 5.1) 을 참고하고 capacity 가 10인 원형 큐를 구현하시오.
-# - P-2 라인 편집기의 명령어 처리 부분을 인용하여, enqueue (e), dequeue (d) 2 개의 명령어를 사용할 수 있도록 테스트 프로그램을 작성하시오.
-# - enqueue 할 경우, 요소 값을 사용자로부터 입력받으시오.
-# - 큐 연산 (enqueue, dequeue) 가 실행된 후, queue 내용을 화면에 출력하시오.
-
-
-class CircularQueue :
+lass CircularQueue :
     def __init__( self, capacity = 10 ) :
         self.capacity = capacity        # 용량(고정)
         self.array = [None] * capacity  # 요소들을 저장할 배열
