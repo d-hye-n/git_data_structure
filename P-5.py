@@ -1,54 +1,94 @@
-# 코드 8.14: 최대힙의 삽입 알고리즘         참고 코드: ch08/MaxHeap.py
-from sre_constants import error
-
-
-def heappush(heap, n):
-    heap.append(n)  # 맨 마지막 노드로 일단 삽입
-    i = len(heap) - 1  # 노드 n의 위치
-    while i != 1:  # n이 루트가 아니면 up-heap 진행
-        pi = i // 2  # 부모 노드의 위치
-        if n <= heap[pi]:  # 부모보다 작으면 up-heap 종료
+def heappush_min(heap, n):
+    heap.append(n)
+    i = len(heap) - 1
+    while i != 1:
+        pi = i // 2
+        if n[0] >= heap[pi][0]:
             break
-        heap[i] = heap[pi]  # 부모를 끌어내림
-        i = pi  # i가 부모의 인덱스가 됨
-    heap[i] = n  # 마지막 위치에 n 삽입
+        heap[i] = heap[pi]
+        i = pi
+    heap[i] = n
 
 
-# 코드 8.15: 최대힙의 삭제 알고리즘         참고 코드: ch08/MaxHeap.py
-def heappop(heap):
-    size = len(heap) - 1  # 노드의 개수
-    if size == 0:  # 공백상태
+def heappop_min(heap):
+    size = len(heap) - 1
+    if size == 0:
         return None
 
-    root = heap[1]  # 삭제할 루트 노드(사장)
-    last = heap[size]  # 마지막 노드(말단사원)
-    pi = 1  # 부모 노드의 인덱스
-    i = 2  # 자식 노드의 인덱스
+    root = heap[1]
+    last = heap[size]
+    pi = 1
+    i = 2
 
-    while i <= size:  # 마지막 노드 이전까지
-        if i < size and heap[i] < heap[i + 1]:  # right가 더 크면 i를 1 증가 (기본은 왼쪽 노드)
-            i += 1  # 비교할 자식은 오른쪽 자식
-        if last >= heap[i]:  # 자식이 더 작으면 down-heap 종료
+    while i <= size:
+        if i < size and heap[i][0] > heap[i + 1][0]:
+            i += 1
+        if last[0] <= heap[i][0]:
             break
-        heap[pi] = heap[i]  # 아니면 down-heap 계속
+        heap[pi] = heap[i]
         pi = i
         i *= 2
 
-    heap[pi] = last  # 맨 마지막 노드를 parent위치에 복사
-    heap.pop()  # 맨 마지막 노드 삭제
-    return root  # 저장해두었던 루트를 반환
+    heap[pi] = last
+    heap.pop()
+    return root
 
-#max heap이니까 min heap으로 바꿔야함 push pop을 바꾸기
-def make_tree(freq):
+
+def make_tree(chars, freqs):
     heap = [0]
-    for n in freq:
-        heappush(heap, n)
-    for i in range(1, len(freq)):
-        e1 = heappop(heap)
-        e2 = heappop(heap)
-        heappush(heap, e1 + e2)
-        print("(%d + %d)" % (e1, e2))
+
+    for char, freq in zip(chars, freqs):
+        heappush_min(heap, (freq, char))
+
+    while len(heap) > 2:
+        e1 = heappop_min(heap)
+        e2 = heappop_min(heap)
+
+        merged_freq = e1[0] + e2[0]
+        merged_node = (merged_freq, (e1, e2))
+
+        heappush_min(heap, merged_node)
+
+    return heappop_min(heap)
 
 
-freq = [15, 12, 8, 6, 4]
-make_tree(freq)
+def huffman_encoding(tree, prefix='', code={}):
+    if isinstance(tree[1], str):
+        code[tree[1]] = prefix
+    else:
+        huffman_encoding(tree[1][0], prefix + '0', code)
+        huffman_encoding(tree[1][1], prefix + '1', code)
+
+    return code
+
+
+def calculate_compression_ratio(original, encoded):
+    original_size = len(original) * 8
+    encoded_size = len(encoded)
+    compression_ratio = ((original_size - encoded_size) / original_size) * 100
+
+    return compression_ratio
+
+
+chars = ['k', 'o', 'r', 'e', 'a', 't', 'c', 'h']
+freqs = [10, 5, 2, 15, 18, 4, 7, 11]
+
+root = make_tree(chars, freqs)
+huffman_code = huffman_encoding(root)
+
+# 유효한 입력을 받을 때까지 반복
+while True:
+    input_string = input("Please a word: ").strip()
+
+    # 입력된 문자열이 허용된 문자들로만 구성되었는지 확인.
+    if all(char in chars for char in input_string):
+        break
+    else:
+        print("illegal character")
+
+encoded_string = ''.join(huffman_code[char] for char in input_string)
+
+compression_ratio = calculate_compression_ratio(input_string, encoded_string)
+
+print(f"결과 비트 열: {encoded_string}")
+print(f"압축률: {compression_ratio:.2f}%")
