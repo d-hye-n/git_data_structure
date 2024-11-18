@@ -44,13 +44,20 @@ while True:
     command = input("[메뉴선택] e-enqueue, d-dequeue, q-종료=> ")
 
     if command == 'e':
-        p = input("  enqueue할 내용: ")
-        q.enqueue(p)
-        print(q)
+        if q.isFull():
+            print("더 이상 추가할 수 없습니다")
+            print(q)
+        else:
+            p = input("  enqueue할 내용: ")
+            q.enqueue(p)
+            print(q)
 
     elif command == 'd':
         q.dequeue()
-        print(q)
+        if q.isEmpty():
+            print("비었습니다")
+        else:
+            print(q)
 
     elif command == 'q':
         exit()
