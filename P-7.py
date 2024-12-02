@@ -432,11 +432,16 @@ if __name__ == "__main__":
     print(" 단말의 개수 =", count_leaf(root))
     print(" 트리의 높이 =", calc_height(root))
 
-    k = int(input("삭제하고 싶은 노드번호를 입력하세요:"))
-    print(f"node {k} 삭제")
-    delete_avl(root, k)
+    for _ in range(int(input("삭제하고 싶은 노드 갯수를 입력하세요:"))):
+        k = int(input("삭제하고 싶은 노드번호를 입력하세요:"))
+        print(f"node {k} 삭제")
+        delete_avl(root, k)
 
-    print(" 노드의 개수 =", count_node(root))
-    print(" 단말의 개수 =", count_leaf(root))
-    print(" 트리의 높이 =", calc_height(root))
+        print("AVL(%d): " % i, end='')
+        levelorder(root)
+        print()
+        print(" 노드의 개수 =", count_node(root))
+        print(" 단말의 개수 =", count_leaf(root))
+        print(" 트리의 높이 =", calc_height(root))
+
 
