@@ -157,6 +157,18 @@ def inorder(n):
         print(n.key, end=' ')  # node의 key만 중위순회로 출력
         inorder(n.right)
 
+def preorder(n):
+    if n is not None:
+        print(n.key, end=' ')
+        preorder(n.left)
+        preorder(n.right)
+
+def postorder(n):
+    if n is not None:
+        postorder(n.left)
+        postorder(n.right)
+        print(n.key, end=' ')
+
 
 # 코드 9.11: 이진탐색트리를 이용한 맵 클래스
 class BSTMap():
@@ -189,9 +201,14 @@ class BSTMap():
     def delete(self, key):
         self.root = delete_bst(self.root, key)
 
-    def display(self, msg='BTSMap :'):
+    def display(self, msg='BTSMap :', order=int(input('1. Inorder, 2. Preorder, 3. Postorder : '))):
         print(msg, end='')
-        inorder(self.root)
+        if order == 1:
+            inorder(self.root)
+        elif order == 2:
+            preorder(self.root)
+        elif order == 3:
+            postorder(self.root)
         print()
 
 
