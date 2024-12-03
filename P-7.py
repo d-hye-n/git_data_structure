@@ -9,182 +9,6 @@ class BSTNode:
     def isLeaf(self):
         return self.left is None and self.right is None
 
-#################################################################
-
-# 코드 9.2: 이진탐색트리의 탐색 연산(순환 구조)
-def search_bst(n, key) :
-    if n == None :
-        return None
-    elif key == n.key:
-        return n
-    elif key < n.key:
-        return search_bst(n.left, key)
-    else:
-        return search_bst(n.right, key)
-
-# 코드 9.3: 이진탐색트리의 탐색 연산(반복 구조)
-def search_bst_iter(n, key) :
-    while n != None :
-        if key == n.key:
-            return n
-        elif key < n.key:
-            n = n.left
-        else:
-            n = n.right
-    return None
-
-# 코드 9.4: 이진탐색트리의 값을 이용한 탐색 연산
-def search_value_bst(n, value) :
-    if n == None :
-        return None
-    elif value == n.value:
-        return n
-    res = search_value_bst(n.left, value)
-    if res is not None :
-       return res
-    return search_value_bst(n.right, value)
-
-
-# 코드 9.5: 최대와 최소 키를 가지는 노드 탐색 연산
-def search_max_bst(n) :
-    while n != None and n.right != None:
-        n = n.right
-    return n
-
-def search_min_bst(n) :
-    while n != None and n.left != None:
-        n = n.left
-    return n
-
-
-#################################################################
-
-# 코드 9.6: 이진탐색트리의 삽입 연산(순환 구조)
-def insert_bst(r, n) :
-    if n.key < r.key:
-        if r.left is None :
-           r.left = n
-           return True
-        else :
-           return insert_bst(r.left, n)
-    elif n.key > r.key :
-        if r.right is None :
-           r.right = n
-           return True
-        else :
-           return insert_bst(r.right, n)
-    else :
-        return False
-
-#################################################################
-
-# 코드 9.7: 단말노드의 삭제 연산(case1)
-def delete_bst_case1 (parent, node, root) :
-    if parent is None: 			# 삭제할 단말 노드가 루트이면
-        root = None			    # 공백 트리가 됨
-    else :
-        if parent.left == node:	# 삭제할 노드가 부모의 왼쪽 자식이면
-            parent.left = None	# 부모의 왼쪽 링크를 None
-        else :				    # 오른쪽 자식이면
-            parent.right = None	# 부모의 오른쪽 링크를 None
-    return root
-
-# 코드 9.8: 자식이 하나인 노드의 삭제 연산(case2)
-def delete_bst_case2 (parent, node, root) :
-    if node.left is not None :	# 삭제할 노드가 왼쪽 자식만 가짐
-        child = node.left		# child는 왼쪽 자식
-    else :				        # 삭제할 노드가 오른쪽 자식만 가짐
-        child = node.right		# child는 오른쪽 자식
-
-    if node == root :			# 없애려는 노드가 루트이면
-        root = child			# 이제 child가 새로운 루트가 됨
-    else :
-        if node is parent.left : 	# 삭제할 노드가 부모의 왼쪽 자식
-            parent.left = child		# 부모의 왼쪽 링크를 변경
-        else :				        # 삭제할 노드가 부모의 오른쪽 자식
-            parent.right = child	# 부모의 오른쪽 링크를 변경
-    return root
-
-# 코드 9.9: 자식이 둘인 노드의 삭제 연산(case2)
-def delete_bst_case3 (parent, node, root) :
-    succp = node			    # 후계자의 부모 노드
-    succ = node.right			# 후계자 노드
-    while (succ.left != None) :	# 후계자와 부모노드 탐색
-        succp = succ
-        succ = succ.left
-
-    if (succp.left == succ) :	# 후계자가 왼쪽 자식이면
-        succp.left = succ.right	# 후계자의 오른쪽 자식 연결
-    else :				        # 후계자가 오른쪽 자식이면
-        succp.right = succ.right	# 후계자의 왼쪽 자식 연결
-
-    node.key = succ.key			# 후계자의 키와 값을
-    node.value= succ.value		# 삭제할 노드에 복사
-    node = succ			        # 실제로 삭제하는 것은 후계자 노드
-
-    return root
-
-# 코드 9.10: 이진탐색트리의 삭제 연산
-def delete_bst (root, key) :
-    if root == None : return None       # 공백 트리
-
-    parent = None                       # 삭제할 노드의 부모 탐색
-    node = root                         # 삭제할 노드 탐색
-    while node != None and node.key != key :
-        parent = node
-        if key < node.key : node = node.left
-        else : node = node.right;
-    if node == None : return root       # 삭제할 노드가 없음
-
-	# case 1: 단말 노드
-    if node.left == None and node.right == None :
-        root = delete_bst_case1 (parent, node, root)
-
-	#  case 2: 하나의 자식을 가진 노드
-    elif node.left==None or node.right==None :
-        root = delete_bst_case2 (parent, node, root)
-
-	#  case 3: 두 개의 자식을 가진 노드
-    else :
-        root = delete_bst_case3 (parent, node, root)
-
-    return root
-
-
-
-# 코드 8.1: 이진트리를 위한 노드 클래스
-class TNode:
-    def __init__ (self, elem, left, right):
-        self.data = elem
-        self.left = left
-        self.right = right
-
-    def isLeaf(self):
-        return self.left is None and self.right is None
-
-# 코드 8.2: 이진트리의 전위순회
-def preorder(n) :
-    if n is not None :
-        print(n.data, end=' ')
-        preorder(n.left)
-        preorder(n.right)
-
-# 코드 8.3: 이진트리의 중위순회
-def inorder(n) :
-    if n is not None :
-        inorder(n.left)
-        print(n.data, end=' ')
-        inorder(n.right)
-
-# 코드 8.4: 이진트리의 후위순회
-def postorder(n) :
-    if n is not None :
-        postorder(n.left)
-        postorder(n.right)
-        print(n.data, end=' ')
-
-
-
 
 # 코드 5.1: 배열로 구현된 원형 큐 클래스
 class CircularQueue :
@@ -210,34 +34,6 @@ class CircularQueue :
             self.front = (self.front + 1) % self.capacity
             return self.array[self.front]
 
-    def peek( self ):
-        if not self.isEmpty():
-            return self.array[(self.front + 1) % self.capacity]
-
-
-    # 코드 5.2: 큐의 전체 요소의 수 계산
-    def size( self ) :
-       return (self.rear - self.front + self.capacity) % self.capacity
-
-    # 코드 5.3: 문자열 변환을 위한 str 연산자 중복
-    def __str__(self):
-        if self.front < self.rear :
-            return str(self.array[self.front+1:self.rear+1])
-        else :
-            return str(self.array[self.front+1:self.capacity] + \
-                       self.array[0:self.rear+1] )
-
-
-
-def levelorder(root) :
-    queue = CircularQueue()
-    queue.enqueue(root)
-    while not queue.isEmpty() :
-        n = queue.dequeue()
-        if n is not None :
-            print(n.data, end=' ')
-            queue.enqueue(n.left)
-            queue.enqueue(n.right)
 
 # 코드 8.6: 이진트리의 노드 수 계산
 def count_node(n) :
@@ -258,129 +54,78 @@ def calc_height(n) :
     if n is None : return 0
     hLeft = calc_height(n.left)
     hRight = calc_height(n.right)
-    if (hLeft > hRight) : return hLeft + 1
-    else: return hRight + 1
-
-# 기타 연산들
-def evaluate(n) :
-    if n is None :
-       return 0
-    elif n.left is None and n.right is None :
-       return n.data
-    else :
-        op1 = evaluate(n.left)
-        op2 = evaluate(n.right)
-        if n.data == '+' : return op1 + op2
-        elif n.data == '-' : return op1 - op2
-        elif n.data == '*' : return op1 * op2
-        elif n.data == '/' : return op1 / op2
-
-def calc_size(n) :
-    if n is None :
-        return 0
-    else :
-        return n.data + calc_size(n.left) + calc_size(n.right)
-
-
-
-def testExprTree() :
-    n1 = TNode(3, None, None)
-    n2 = TNode(2, None, None)
-    n3 = TNode('*', n1, n2)
-    n4 = TNode(5, None, None)
-    n5 = TNode(6, None, None)
-    n6 = TNode('-', n4, n5)
-    root = TNode('+', n3, n6)
-
-    tree = BinaryTree(root)
-    tree.printInOrder   ('Evaluate Expression : ')
-    print(' ==> ' + str(evaluate(root)))
-
-def testFolderSize() :
-    m4 = TNode(200, None, None)
-    m5 = TNode(500, None, None)
-    m3 = TNode(100, m4, m5)
-    m2 = TNode(50, None, None)
-    root = TNode(0, m2, m3)
-    tree = BinaryTree(root)
-    print("Calculate Folder Size = %d KB" % calc_size(root))
-
-
-def calc_height(n) :
-    if n is None : return 0
-    hLeft = calc_height(n.left)
-    hRight = calc_height(n.right)
-    if (hLeft > hRight) : return hLeft + 1
+    if hLeft > hRight : return hLeft + 1
     else: return hRight + 1
 
 # 코드 9.13: 노드의 균형인수 계산 함수
 def calc_height_diff(n) :
-    if n==None :
+    if n is None:
        return 0
     return calc_height(n.left) - calc_height(n.right)
 
 # 코드 9.14: AVL 트리의 LL회전
 def rotateLL(A) :
-	B = A.left
-	A.left = B.right
-	B.right = A
-	return B
+    B = A.left
+    A.left = B.right
+    B.right = A
+    return B
 
 # 코드 9.15: AVL 트리의 RR회전
 def rotateRR(A) :
-	B = A.right
-	A.right = B.left
-	B.left = A
-	return B
+    B = A.right
+    A.right = B.left
+    B.left = A
+    return B
 
 # 코드 9.16: AVL 트리의 RL회전
 def rotateRL(A) :
-	B = A.right
-	A.right = rotateLL(B)
-	return rotateRR(A)
+    B = A.right
+    A.right = rotateLL(B)
+    return rotateRR(A)
 
 # 코드 9.17: AVL 트리의 LR회전
 def rotateLR(A) :
-	B = A.left
-	A.left = rotateRR(B)
-	return rotateLL(A)
+    B = A.left
+    A.left = rotateRR(B)
+    return rotateLL(A)
 
 # 코드 9.18: AVL 트리의 재균형 함수
 def reBalance (parent) :
-	hDiff = calc_height_diff(parent)
+    hDiff = calc_height_diff(parent)
 
-	if hDiff > 1 :
-		if calc_height_diff( parent.left ) > 0 :
-			parent = rotateLL( parent )
-		else :
-			parent = rotateLR( parent )
-	elif hDiff < -1 :
-		if calc_height_diff( parent.right ) < 0 :
-			parent = rotateRR( parent )
-		else :
-			parent = rotateRL( parent )
-	return parent
+    if hDiff > 1 :
+        if calc_height_diff( parent.left ) > 0 :
+            parent = rotateLL( parent )
+        else :
+            parent = rotateLR( parent )
+    elif hDiff < -1 :
+        if calc_height_diff( parent.right ) < 0 :
+            parent = rotateRR( parent )
+        else :
+            parent = rotateRL( parent )
+    return parent
 
 # 코드 9.19: AVL 트리의 삽입 연산
 def insert_avl(parent, node) :
     if node.key < parent.key :
-        if parent.left != None :
+        if parent.left is not None:
             parent.left = insert_avl(parent.left, node)
         else :
             parent.left = node
         return reBalance(parent)
 
     elif node.key > parent.key :
-        if parent.right != None :
+        if parent.right is not None:
             parent.right = insert_avl(parent.right, node)
         else :
             parent.right = node
-        return reBalance(parent);
+        return reBalance(parent)
     else :
         print("중복된 키 에러")
 
+
 def delete_avl(parent, key) :
-    if parent == None : return None
+    if parent is None: return None
     elif key < parent.key :
         parent.left = delete_avl(parent.left, key)
         return reBalance(parent)
@@ -388,13 +133,11 @@ def delete_avl(parent, key) :
         parent.right = delete_avl(parent.right, key)
         return reBalance(parent)
     else :
-        if parent.left == None :
+        if parent.left is None:
             temp = parent.right
-            parent = None
             return temp
-        elif parent.right == None :
+        elif parent.right is None:
             temp = parent.left
-            parent = None
             return temp
 
 
@@ -409,17 +152,16 @@ def levelorder(root) :
             queue.enqueue(n.right)
 
 
-
-
 # 코드 9.20: AVL 트리 테스트 프로그램
 if __name__ == "__main__":
     node = [7,8,9,2,1,5,3,6,4]
     # node = [0,1,2,3,4,5,6,7,8,9]
+    # node = [7]
 
     root = None
     for i in node :
         n = BSTNode(i)
-        if root == None :
+        if root is None:
             root = n
         else :
            root = insert_avl(root, n)
@@ -437,11 +179,9 @@ if __name__ == "__main__":
         print(f"node {k} 삭제")
         delete_avl(root, k)
 
-        print("AVL(%d): " % i, end='')
+        print(f"AVL({k}): ", end='')
         levelorder(root)
         print()
         print(" 노드의 개수 =", count_node(root))
         print(" 단말의 개수 =", count_leaf(root))
         print(" 트리의 높이 =", calc_height(root))
-
-
