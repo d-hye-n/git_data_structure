@@ -182,7 +182,7 @@ if __name__ == "__main__":
             print(" 노드의 개수 = 0")
             print(" 단말의 개수 = 0")
             print(" 트리의 높이 = 0")
-            continue
+            break
         print(f"node {k} 삭제")
         delete_avl(root, k)
 
