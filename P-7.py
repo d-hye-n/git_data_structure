@@ -125,7 +125,8 @@ def insert_avl(parent, node) :
 
 
 def delete_avl(parent, key) :
-    if parent is None: return None
+    if parent is None:
+        return None
     elif key < parent.key :
         parent.left = delete_avl(parent.left, key)
         return reBalance(parent)
@@ -176,6 +177,12 @@ if __name__ == "__main__":
 
     for _ in range(int(input("삭제하고 싶은 노드 갯수를 입력하세요:"))):
         k = int(input("삭제하고 싶은 노드번호를 입력하세요:"))
+        if k == root.key:
+            print(f"AVL({k}): ")
+            print(" 노드의 개수 = 0")
+            print(" 단말의 개수 = 0")
+            print(" 트리의 높이 = 0")
+            continue
         print(f"node {k} 삭제")
         delete_avl(root, k)
 
